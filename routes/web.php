@@ -19,3 +19,12 @@ Route::get('/', function () {
         "version" => "0.0.1v"
     ]);
 });
+
+// Users
+Route::get("/users/{id}", function () {
+    return response()->json([
+        "id" => '0',
+        "username" => "test",
+        "created_at" => "2014"
+    ]);
+})->where('id', '[0-9]+');
