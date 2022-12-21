@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -22,36 +23,8 @@ Route::get('/', function () {
     ]);
 });
 
-// Users
-Route::post("/users", function (Request $request) {
-    $has = $request->has(['name', 'email', 'password']);
-    if ($has) {
-        DB::table("users")->insert([
-            "name" => $request->post('name'),
-            "email" => $request->post('email'),
-            "password" => $request->post('password'),
-            "created_at" => now(),
-            "updated_at" => now(),
-        ]);
-        return response()->json([
-            "success" => true,
-            "message" => "User created successfully!"
-        ]);
-    }
-    return response(status:401)->json([
-        "success" => false,
-        "message" => "Your field has not good"
-    ]);
+Route::middleware('role:admin')->group(function () {
+    // Users
+    Route::get('/users/{id}', [UserController::class, "show"])->where('id', "[0-9]+");
+    Route::post('/users', [UserController::class, "store"]);
 });
-
-Route::get("/users/{id}", function (int $id) {
-    $user = DB::table("users")->where('id', '=', intval($id))->get(['id', 'name', 'email', 'created_at', 'updated_at']);
-
-    if ($user->isEmpty()) {
-        return response()->json([
-            "error" => 404,
-            "message" => "User not found."
-        ], 404);
-    }
-    return response()->json($user->toArray());
-})->where('id', '[0-9]+');

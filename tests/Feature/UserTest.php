@@ -17,21 +17,21 @@ class UserTest extends TestCase
             "name" => fake()->name(),
             "email" => fake()->email(),
             "password" => fake()->password(),
-        ]);
+        ], ['Authorization' => '123abc']);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function test_get_not_exist_user()
     {
-        $response = $this->get('/users/-1');
+        $response = $this->get('/users/4688465465', ['Authorization' => '123abc']);
 
         $response->assertStatus(404);
     }
 
     public function test_get_exist_user()
     {
-        $response = $this->get('/users/1');
+        $response = $this->get('/users/1', ['Authorization' => '123abc']);
 
         $response->assertStatus(200);
     }
