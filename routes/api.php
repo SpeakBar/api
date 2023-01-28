@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['api', 'auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('/auth/account')->group(function () {
+    Route::get('/', function () {
+        return response()->json([
+            "message" => "Unauthorized.",
+        ], 401);
+    })->name('login');
+    Route::post('/', [\App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('/create', [\App\Http\Controllers\AuthController::class, 'store']);
+    Route::delete('/delete', [\App\Http\Controllers\AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
 });
