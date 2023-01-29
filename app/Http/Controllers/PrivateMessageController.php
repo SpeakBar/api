@@ -7,6 +7,7 @@ use App\Http\Requests\StorePrivateMessageRequest;
 use App\Http\Requests\UpdatePrivateMessageRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrivateMessageController extends Controller
 {
@@ -14,14 +15,20 @@ class PrivateMessageController extends Controller
      * Display a listing of the resource.
      *
      * @param User $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
     public function index(Request $request, User $user)
     {
-        return PrivateMessage::where([
-            'channel_id' => $user->id,
-            'user_id' => $request->user()->id
-        ])->get();
+        return DB::table('private_messages')
+            ->where([
+                'channel_id' => $user->id,
+                'user_id' => $request->user()->id,
+            ])
+            ->orWhere([
+                'channel_id' => $request->user()->id,
+                'user_id' => $user->id,
+            ])
+            ->get();
     }
 
     /**
