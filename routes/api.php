@@ -28,3 +28,11 @@ Route::prefix('/auth/account')->group(function () {
     Route::post('/create', [\App\Http\Controllers\AuthController::class, 'store']);
     Route::delete('/delete', [\App\Http\Controllers\AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
 });
+
+Route::group([
+    'prefix' => '/users/{user}/dm',
+    'middleware' => ['api', 'auth:sanctum']
+], function () {
+    Route::post('/', [\App\Http\Controllers\PrivateMessageController::class, 'store']);
+    Route::get('/', [\App\Http\Controllers\PrivateMessageController::class, 'index']);
+});
