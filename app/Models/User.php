@@ -45,4 +45,12 @@ class User extends Authenticatable
     public function dms() {
         return $this->hasMany(PrivateMessage::class);
     }
+
+    public function followers() {
+        return $this->hasMany(Follower::class, 'following_id');
+    }
+
+    public function followings() {
+        return $this->hasMany(Follower::class, 'follower_id');
+    }
 }
