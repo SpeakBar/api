@@ -19,6 +19,7 @@ class PrivateMessageController extends Controller
      */
     public function index(Request $request, User $user)
     {
+        // TODO : Condition is false.
         return DB::table('private_messages')
             ->where([
                 'channel_id' => $user->id,
