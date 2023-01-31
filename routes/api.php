@@ -29,10 +29,15 @@ Route::prefix('/auth/account')->group(function () {
     Route::delete('/delete', [\App\Http\Controllers\AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
 });
 
-Route::group([
-    'prefix' => '/users/{user}/dm',
-    'middleware' => ['api', 'auth:sanctum']
-], function () {
-    Route::post('/', [\App\Http\Controllers\PrivateMessageController::class, 'store']);
-    Route::get('/', [\App\Http\Controllers\PrivateMessageController::class, 'index']);
+Route::middleware(['api', 'auth:sanctum'])->group(function () {
+   Route::prefix("/users/{user}/dm")->group(function () {
+       Route::post('/', [\App\Http\Controllers\PrivateMessageController::class, 'store']);
+       Route::get('/', [\App\Http\Controllers\PrivateMessageController::class, 'index']);
+   });
+
+   Route::prefix("/users/{user}/follow")->group(function () {
+        Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
+        Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
+        Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
+   });
 });
