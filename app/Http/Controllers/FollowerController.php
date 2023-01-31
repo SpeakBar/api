@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreFollowerRequest;
-use App\Models\Follower;
+use App\Http\Resources\FollowerResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class FollowerController extends Controller
 {
@@ -26,21 +28,21 @@ class FollowerController extends Controller
      * @param User $user
      * @return string[]
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request, User $user): array
     {
-        $exist = Follower::where([
+        $exist = DB::table('followers')->where([
             'follower_id' => $request->user()->id,
             'following_id' => $user->id,
         ])->exists();
 
         if (! $exist) {
-            return Follower::create([
-                'follower_id' => $request->user()->id,
-                'following_id' => $user->id,
-            ]);
+            $user->followers()->attach($request->user());
+            return [
+                'message' => "success"
+            ];
         }
         return [
-            'message' => "Deja follow"
+            'message' => "non"
         ];
     }
 
@@ -48,34 +50,36 @@ class FollowerController extends Controller
      * Display the specified resource.
      *
      * @param  User  $user
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return JsonResponse
      */
     public function show(User $user)
     {
-        return $user->followers()->get();
+        return response()->json(
+            FollowerResource::collection($user->followers()->get())
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  User  $user
-     * @param  Request $request
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return JsonResponse|string[]
      */
-    public function destroy(Request $request, User $user)
+    public function destroy(User $user)
     {
-        $follower = Follower::where([
+        $exist = DB::table('followers')->where([
+            'follower_id' => auth()->user()->id,
             'following_id' => $user->id,
-            'follower_id' => $request->user()->id,
-        ]);
+        ])->exists();
 
-        if ($follower->exists()) {
+        if ($exist) {
+            $user->followers()->detach(auth()->user());
             return [
-                'delete' => $follower->delete()
+                'message' => "Success",
             ];
         }
         return response()->json([
-            'message' => "Not found."
+            'message' => "Not Found."
         ], 404);
     }
 }

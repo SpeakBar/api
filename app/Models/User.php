@@ -42,15 +42,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function dms() {
+    public function dms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(PrivateMessage::class);
     }
 
-    public function followers() {
-        return $this->hasMany(Follower::class, 'following_id');
+    public function followers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 
-    public function followings() {
-        return $this->hasMany(Follower::class, 'follower_id');
+    public function followings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
     }
 }
