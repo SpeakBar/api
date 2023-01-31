@@ -40,4 +40,8 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
         Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
    });
+
+   Route::prefix("/groups")->group(function () {
+      Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
+   });
 });
