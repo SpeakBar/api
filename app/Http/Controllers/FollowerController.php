@@ -69,7 +69,7 @@ class FollowerController extends Controller
             'follower_id' => $request->user()->id,
         ]);
 
-        if (! $follower->exists()) {
+        if ($follower->exists()) {
             return [
                 'delete' => $follower->delete()
             ];
