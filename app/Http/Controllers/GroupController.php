@@ -67,11 +67,27 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Group $group)
+    public function destroy(int $id)
     {
-        //
+        $group = Group::find($id);
+
+        if ($group == null) {
+            return response()->json([
+                'message' => "Not Found."
+            ], 404);
+        }
+
+        if ($group->owner_id == auth()->id()) {
+            auth()->user()->groups()->delete();
+            return response()->json([
+                'message' => "Success"
+            ]);
+        }
+        return response()->json([
+            'message' => "Unauthorized."
+        ], 401);
     }
 }
