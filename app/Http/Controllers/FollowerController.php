@@ -25,11 +25,18 @@ class FollowerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param User $user
-     * @return string[]
+     * @param int $id
+     * @return JsonResponse
      */
-    public function store(Request $request, User $user): array
+    public function store(Request $request, int $id): JsonResponse
     {
+        $user = User::find($id);
+        if ($user == null) {
+            return response()->json([
+                'message' => "Not Found."
+            ], 404);
+        }
+
         $exist = DB::table('followers')->where([
             'follower_id' => $request->user()->id,
             'following_id' => $user->id,
@@ -37,23 +44,29 @@ class FollowerController extends Controller
 
         if (! $exist) {
             $user->followers()->attach($request->user());
-            return [
-                'message' => "success"
-            ];
+            return response()->json([
+                'message' => "Created."
+            ], 201);
         }
-        return [
-            'message' => "non"
-        ];
+        return response()->json([
+            'message' => "Accepted."
+        ], 202);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  User  $user
+     * @param  int  $id
      * @return JsonResponse
      */
-    public function show(User $user)
+    public function show(int $id)
     {
+        $user = User::find($id);
+        if ($user == null) {
+            return response()->json([
+                'message' => "Not Found."
+            ], 404);
+        }
         return response()->json(
             FollowerResource::collection($user->followers()->get())
         );
@@ -62,11 +75,18 @@ class FollowerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  User  $user
+     * @param  int  $id
      * @return JsonResponse|string[]
      */
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
+        $user = User::find($id);
+        if ($user == null) {
+            return response()->json([
+                'message' => "Not Found."
+            ], 404);
+        }
+
         $exist = DB::table('followers')->where([
             'follower_id' => auth()->user()->id,
             'following_id' => $user->id,
