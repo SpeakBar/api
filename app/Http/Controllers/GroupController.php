@@ -52,11 +52,16 @@ class GroupController extends Controller
      *
      * @param  \App\Http\Requests\UpdateGroupRequest  $request
      * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateGroupRequest $request, Group $group)
     {
-        //
+        $group->update([
+            'name' => $request->name,
+        ]);
+        return response()->json([
+            'message' => "Updated."
+        ], 202);
     }
 
     /**

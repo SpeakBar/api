@@ -43,5 +43,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
 
    Route::prefix("/groups")->group(function () {
       Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
+      Route::addRoute(['PUT', 'PATCH'], '/{group}', [\App\Http\Controllers\GroupController::class, 'update'])->where('group', '[0-9]+');
    });
 });

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateGroupRequest extends FormRequest
 {
@@ -11,9 +13,9 @@ class UpdateGroupRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return $this->group->owner_id == auth()->user()->id;
     }
 
     /**
@@ -24,7 +26,25 @@ class UpdateGroupRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|min:1|max:25',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'message' => "Invalid body."
+            ], 401)
+        );
+    }
+
+    public function failedAuthorization()
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'message' => "Unauthorized."
+            ], 401)
+        );
     }
 }
