@@ -14,8 +14,8 @@ class Group extends Model
         'owner_id'
     ];
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'group_user')->withPivot('joined_at');
     }
 }

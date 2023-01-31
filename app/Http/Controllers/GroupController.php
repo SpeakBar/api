@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupResource;
+use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Models\User;
+use Illuminate\Support\Arr;
 
 class GroupController extends Controller
 {
@@ -40,11 +44,25 @@ class GroupController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\JsonResponse
      */
     public function show(Group $group)
     {
-        //
+        $users = $group->users()->get();
+        $data = [
+            'name' => $group->name,
+            'iconURL' => $group->iconURL,
+            'created_at' => $group->created_at,
+            'owner' => new UserResource(User::find($group->owner_id)),
+            'members' => GroupResource::collection($users),
+        ];
+
+        if ($users->contains(key: 'id', value: auth()->id())) {
+            return $data;
+        }
+        return response()->json([
+            'message' => "Unauthorized."
+        ], 401);
     }
 
     /**
