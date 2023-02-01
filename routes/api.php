@@ -47,6 +47,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
       Route::addRoute(['PUT', 'PATCH'], '/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
       Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
 
-      Route::post('/{group}/invite', [\App\Http\Controllers\InviteGroupController::class, 'store']);
+      Route::post('/{group}/join', []);
    });
 });

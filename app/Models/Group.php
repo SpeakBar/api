@@ -20,9 +20,4 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'group_user')->withPivot('joined_at');
     }
-
-    public function invites(): HasMany
-    {
-        return $this->hasMany(Invite::class);
-    }
 }
