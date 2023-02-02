@@ -36,17 +36,17 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
    });
 
    Route::prefix("/users/{user}/follow")->group(function () {
-        Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
-        Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
-        Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
+       Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
+       Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
+       Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
    });
-
    Route::prefix("/groups")->group(function () {
-      Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
-      Route::get('/{group}', [\App\Http\Controllers\GroupController::class, 'show']);
-      Route::addRoute(['PUT', 'PATCH'], '/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
-      Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
+       Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
+       Route::get('/{group}', [\App\Http\Controllers\GroupController::class, 'show']);
+       Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
+       Route::addRoute(['PUT', 'PATCH'], '/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
 
-      Route::post('/{group}/join', []);
+       Route::post('/{group}/add', [\App\Http\Controllers\JoinGroupController::class, 'store']);
+       Route::delete('/{group}/leave', [\App\Http\Controllers\JoinGroupController::class, 'destroy']);
    });
 });
