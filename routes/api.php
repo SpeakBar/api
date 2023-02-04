@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JoinGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,9 +45,10 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
        Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
        Route::get('/{group}', [\App\Http\Controllers\GroupController::class, 'show']);
        Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
-       Route::addRoute(['PUT', 'PATCH'], '/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
+       Route::put('/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
 
-       Route::post('/{group}/add', [\App\Http\Controllers\JoinGroupController::class, 'store']);
-       Route::delete('/{group}/leave', [\App\Http\Controllers\JoinGroupController::class, 'destroy']);
+       Route::post('/{group}/add', [JoinGroupController::class, 'store']);
+       Route::delete('/{group}/leave', [JoinGroupController::class, 'destroy']);
+       Route::put('/{group}/kick', [JoinGroupController::class, 'update']);
    });
 });

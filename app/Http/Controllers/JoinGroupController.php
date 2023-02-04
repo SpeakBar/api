@@ -65,12 +65,27 @@ class JoinGroupController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Group  $group
+     * @return \Illuminate\Http\JsonResponse|string[]
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Group $group)
     {
-        //
+        if ($group->owner_id != $request->user()->id) {
+            return response()->json([
+                'message' => "Unauthorized.",
+            ], 401);
+        }
+
+        if (! $group->users()->get()->contains(User::find($request->user_id))) {
+            return response()->json([
+                'message' => "Invalid body.",
+            ], 401);
+        }
+
+        $group->users()->detach($request->user_id);
+        return [
+            'message' => "Ok.",
+        ];
     }
 
     /**
