@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JoinGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,8 +37,18 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
    });
 
    Route::prefix("/users/{user}/follow")->group(function () {
-        Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
-        Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
-        Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
+       Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
+       Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
+       Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
+   });
+   Route::prefix("/groups")->group(function () {
+       Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
+       Route::get('/{group}', [\App\Http\Controllers\GroupController::class, 'show']);
+       Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
+       Route::put('/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
+
+       Route::post('/{group}/add', [JoinGroupController::class, 'store']);
+       Route::delete('/{group}/leave', [JoinGroupController::class, 'destroy']);
+       Route::put('/{group}/kick', [JoinGroupController::class, 'update']);
    });
 });
