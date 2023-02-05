@@ -8,27 +8,18 @@ use App\Models\Group;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Models\User;
-use Illuminate\Support\Arr;
+use Illuminate\Http\JsonResponse;
 
 class GroupController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreGroupRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param StoreGroupRequest $request
+     * @return JsonResponse
      */
-    public function store(StoreGroupRequest $request)
+    public function store(StoreGroupRequest $request): JsonResponse
     {
         $request->user()->groups()->create([
             'name' => $request->name,
@@ -43,10 +34,10 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Group  $group
-     * @return array|\Illuminate\Http\JsonResponse
+     * @param Group $group
+     * @return array|JsonResponse
      */
-    public function show(Group $group)
+    public function show(Group $group): JsonResponse|array
     {
         $users = $group->users()->get();
         $data = [
@@ -68,11 +59,11 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateGroupRequest  $request
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\JsonResponse
+     * @param UpdateGroupRequest $request
+     * @param Group $group
+     * @return JsonResponse
      */
-    public function update(UpdateGroupRequest $request, Group $group)
+    public function update(UpdateGroupRequest $request, Group $group): JsonResponse
     {
         $group->update([
             'name' => $request->name,
@@ -86,9 +77,9 @@ class GroupController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $group = Group::find($id);
 

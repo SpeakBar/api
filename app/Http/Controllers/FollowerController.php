@@ -6,25 +6,14 @@ use App\Http\Resources\FollowerResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 class FollowerController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param int $id
      * @return JsonResponse
      */
@@ -59,7 +48,7 @@ class FollowerController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         $user = User::find($id);
         if ($user == null) {
@@ -78,7 +67,7 @@ class FollowerController extends Controller
      * @param  int  $id
      * @return JsonResponse|string[]
      */
-    public function destroy(int $id)
+    public function destroy(int $id): array|JsonResponse
     {
         $user = User::find($id);
         if ($user == null) {

@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Group;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property string $name
+ * @property Group $group
+ */
 class UpdateGroupRequest extends FormRequest
 {
     /**

@@ -7,6 +7,10 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @property int $user_id
+ * @property Group $group
+ */
 class StoreJoinRequest extends FormRequest
 {
     /**
@@ -14,9 +18,9 @@ class StoreJoinRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        $group = Group::find($this->group);
+        $group = Group::find($this->group->id);
         if ($group == null) {
             return false;
         }
@@ -28,7 +32,7 @@ class StoreJoinRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'user_id' => 'required|integer',

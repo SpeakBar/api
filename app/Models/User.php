@@ -4,11 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticate;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+/**
+ * @property int $id
+ * @method static create(array $array)
+ * @method static find(int $id)
+ */
+class User extends Authenticate
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -42,22 +49,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function dms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function dms(): HasMany
     {
         return $this->hasMany(PrivateMessage::class);
     }
 
-    public function followers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 
-    public function followings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function followings(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
     }
 
-    public function groups(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class);
     }

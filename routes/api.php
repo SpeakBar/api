@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JoinGroupController;
+use App\Http\Controllers\PrivateMessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,27 +29,27 @@ Route::prefix('/auth/account')->group(function () {
             "message" => "Unauthorized.",
         ], 401);
     })->name('login');
-    Route::post('/', [\App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/create', [\App\Http\Controllers\AuthController::class, 'store']);
-    Route::delete('/delete', [\App\Http\Controllers\AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
+    Route::post('/', [AuthController::class, 'login']);
+    Route::post('/create', [AuthController::class, 'store']);
+    Route::delete('/delete', [AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
 });
 
 Route::middleware(['api', 'auth:sanctum'])->group(function () {
    Route::prefix("/users/{user}/dm")->group(function () {
-       Route::post('/', [\App\Http\Controllers\PrivateMessageController::class, 'store']);
-       Route::get('/', [\App\Http\Controllers\PrivateMessageController::class, 'index']);
+       Route::post('/', [PrivateMessageController::class, 'store']);
+       Route::get('/', [PrivateMessageController::class, 'index']);
    });
 
    Route::prefix("/users/{user}/follow")->group(function () {
-       Route::post('/', [\App\Http\Controllers\FollowerController::class, 'store']);
-       Route::get('/', [\App\Http\Controllers\FollowerController::class, 'show']);
-       Route::delete('/', [\App\Http\Controllers\FollowerController::class, 'destroy']);
+       Route::post('/', [FollowerController::class, 'store']);
+       Route::get('/', [FollowerController::class, 'show']);
+       Route::delete('/', [FollowerController::class, 'destroy']);
    });
    Route::prefix("/groups")->group(function () {
-       Route::post('/', [\App\Http\Controllers\GroupController::class, 'store']);
-       Route::get('/{group}', [\App\Http\Controllers\GroupController::class, 'show']);
-       Route::delete('/{group}', [\App\Http\Controllers\GroupController::class, 'destroy']);
-       Route::put('/{group}', [\App\Http\Controllers\GroupController::class, 'update']);
+       Route::post('/', [GroupController::class, 'store']);
+       Route::get('/{group}', [GroupController::class, 'show']);
+       Route::delete('/{group}', [GroupController::class, 'destroy']);
+       Route::put('/{group}', [GroupController::class, 'update']);
 
        Route::post('/{group}/add', [JoinGroupController::class, 'store']);
        Route::delete('/{group}/leave', [JoinGroupController::class, 'destroy']);

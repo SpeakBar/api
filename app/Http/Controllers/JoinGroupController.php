@@ -5,28 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreJoinRequest;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class JoinGroupController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int $id
-     * @return \Illuminate\Http\JsonResponse|string[]
+     * @param StoreJoinRequest $request
+     * @param int $id
+     * @return JsonResponse|string[]
      */
-    public function store(StoreJoinRequest $request, int $id)
+    public function store(StoreJoinRequest $request, int $id): array|JsonResponse
     {
         $group = Group::find($id);
         if ($group == null) {
@@ -51,24 +42,13 @@ class JoinGroupController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  Group  $group
-     * @return \Illuminate\Http\JsonResponse|string[]
+     * @return JsonResponse|string[]
      */
-    public function update(Request $request, Group $group)
+    public function update(Request $request, Group $group): array|JsonResponse
     {
         if ($group->owner_id != $request->user()->id) {
             return response()->json([
@@ -92,9 +72,9 @@ class JoinGroupController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse|string[]
+     * @return JsonResponse|string[]
      */
-    public function destroy($id)
+    public function destroy(int $id): array|JsonResponse
     {
         $group = Group::find($id);
         if ($group == null) {

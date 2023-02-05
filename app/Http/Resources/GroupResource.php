@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
+/**
+ * @property mixed $pivot
+ */
 class GroupResource extends JsonResource
 {
     /**
@@ -15,7 +18,7 @@ class GroupResource extends JsonResource
      * @param  Request  $request
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array|JsonSerializable|Arrayable
     {
         return array_merge(
             (new UserResource($this))->toArray($request),
