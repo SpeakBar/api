@@ -39,6 +39,20 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
+     * route bind
+     */
+    private function callBind() {
+        $notFound = function () {
+            return response()->json([
+                'message' => "Not found.",
+            ], 404);
+        };
+
+        Route::bind('user', $notFound);
+        Route::bind('group', $notFound);
+    }
+
+    /**
      * Configure the rate limiters for the application.
      *
      * @return void

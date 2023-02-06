@@ -18,7 +18,7 @@ class AuthController extends Controller
      * @param StoreUserRequest $request
      * @return array
      */
-    public function store(StoreUserRequest $request): array
+    public function register(StoreUserRequest $request): array
     {
         $created = User::create([
             'name' => $request->name,

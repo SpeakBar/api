@@ -14,18 +14,11 @@ class JoinGroupController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreJoinRequest $request
-     * @param int $id
+     * @param Group $group
      * @return JsonResponse|string[]
      */
-    public function store(StoreJoinRequest $request, int $id): array|JsonResponse
+    public function join(StoreJoinRequest $request, Group $group): array|JsonResponse
     {
-        $group = Group::find($id);
-        if ($group == null) {
-            return response()->json([
-                'message' => "Not found.",
-            ], 404);
-        }
-
         if (! $group->users()->get()->contains($request->user())) {
             return response()->json([
                 'message' => "Unauthorized."
@@ -48,7 +41,7 @@ class JoinGroupController extends Controller
      * @param  Group  $group
      * @return JsonResponse|string[]
      */
-    public function update(Request $request, Group $group): array|JsonResponse
+    public function kick(Request $request, Group $group): array|JsonResponse
     {
         if ($group->owner_id != $request->user()->id) {
             return response()->json([
@@ -71,23 +64,16 @@ class JoinGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Group $group
      * @return JsonResponse|string[]
      */
-    public function destroy(int $id): array|JsonResponse
+    public function leave(Group $group): array|JsonResponse
     {
-        $group = Group::find($id);
-        if ($group == null) {
-            return response()->json([
-                'message' => "Not found."
-            ], 404);
-        }
-
         if (auth()->id() == $group->owner_id) {
             $users = $group->users();
             $users->detach(auth()->user());
             $group->update([
-                'owner_id' => $users->orderBy('joined_at', 'asc')->get()[0]->id
+                'owner_id' => $users->orderBy('joined_at')->get()[0]->id
             ]);
             return [
                 'message' => "Ok."

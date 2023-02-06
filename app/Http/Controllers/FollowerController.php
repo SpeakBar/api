@@ -14,18 +14,11 @@ class FollowerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @param int $id
+     * @param User $user
      * @return JsonResponse
      */
-    public function store(Request $request, int $id): JsonResponse
+    public function follow(Request $request, User $user): JsonResponse
     {
-        $user = User::find($id);
-        if ($user == null) {
-            return response()->json([
-                'message' => "Not Found."
-            ], 404);
-        }
-
         $exist = DB::table('followers')->where([
             'follower_id' => $request->user()->id,
             'following_id' => $user->id,
@@ -64,18 +57,11 @@ class FollowerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  User $user
      * @return JsonResponse|string[]
      */
-    public function destroy(int $id): array|JsonResponse
+    public function unfollow(User $user): array|JsonResponse
     {
-        $user = User::find($id);
-        if ($user == null) {
-            return response()->json([
-                'message' => "Not Found."
-            ], 404);
-        }
-
         $exist = DB::table('followers')->where([
             'follower_id' => auth()->user()->id,
             'following_id' => $user->id,

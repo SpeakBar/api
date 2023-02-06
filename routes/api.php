@@ -24,35 +24,40 @@ Route::middleware(['api', 'auth:sanctum'])->get('/user', function (Request $requ
 });
 
 Route::prefix('/auth/account')->group(function () {
-    Route::get('/', function () {
+    Route::get('/login', function () {
         return response()->json([
             "message" => "Unauthorized.",
         ], 401);
     })->name('login');
-    Route::post('/', [AuthController::class, 'login']);
-    Route::post('/create', [AuthController::class, 'store']);
+
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
     Route::delete('/delete', [AuthController::class, 'delete'])->middleware(['auth:sanctum', 'api']);
 });
 
 Route::middleware(['api', 'auth:sanctum'])->group(function () {
-   Route::prefix("/users/{user}/dm")->group(function () {
-       Route::post('/', [PrivateMessageController::class, 'store']);
-       Route::get('/', [PrivateMessageController::class, 'index']);
-   });
+//   Route::prefix("/users/{user}/dm")->group(function () {
+//       Route::post('/', [PrivateMessageController::class, 'store']);
+//       Route::get('/', [PrivateMessageController::class, 'index']);
+//   });
 
-   Route::prefix("/users/{user}/follow")->group(function () {
-       Route::post('/', [FollowerController::class, 'store']);
-       Route::get('/', [FollowerController::class, 'show']);
-       Route::delete('/', [FollowerController::class, 'destroy']);
-   });
+    Route::prefix("/users/{user}")->group(function () {
+        Route::get('/follow', [FollowerController::class, 'show']);
+        Route::post('/follow', [FollowerController::class, 'follow']);
+        Route::post('/unfollow', [FollowerController::class, 'unfollow']);
+    });
+
    Route::prefix("/groups")->group(function () {
        Route::post('/', [GroupController::class, 'store']);
-       Route::get('/{group}', [GroupController::class, 'show']);
-       Route::delete('/{group}', [GroupController::class, 'destroy']);
-       Route::put('/{group}', [GroupController::class, 'update']);
 
-       Route::post('/{group}/add', [JoinGroupController::class, 'store']);
-       Route::delete('/{group}/leave', [JoinGroupController::class, 'destroy']);
-       Route::put('/{group}/kick', [JoinGroupController::class, 'update']);
+       Route::prefix('/{group}')->group(function () {
+           Route::get('/', [GroupController::class, 'show']);
+           Route::delete('/', [GroupController::class, 'destroy']);
+           Route::put('/', [GroupController::class, 'update']);
+
+           Route::post('/add', [JoinGroupController::class, 'join']);
+           Route::post('/leave', [JoinGroupController::class, 'leave']);
+           Route::put('/kick', [JoinGroupController::class, 'kick']);
+       });
    });
 });
