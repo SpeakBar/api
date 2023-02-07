@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Banner;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -21,7 +23,11 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request): array
     {
         $created = User::create([
+            'uuid' => Str::uuid(),
             'name' => $request->name,
+            'banner_id' => Banner::create([
+                'content' => fake()->hexColor(),
+            ]),
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);

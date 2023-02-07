@@ -25,7 +25,9 @@ class User extends Authenticate
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'name',
+        'banner_id',
         'email',
         'password',
     ];
@@ -48,6 +50,10 @@ class User extends Authenticate
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function banner() {
+        return $this->hasOne(Banner::class);
+    }
 
     public function dms(): HasMany
     {
