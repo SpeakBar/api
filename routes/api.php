@@ -41,6 +41,8 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
 //       Route::get('/', [PrivateMessageController::class, 'index']);
 //   });
 
+    Route::get("/profile", [AuthController::class, 'profile']);
+
     Route::prefix("/users/{user}")->group(function () {
         Route::get('/follow', [FollowerController::class, 'show']);
         Route::post('/follow', [FollowerController::class, 'follow']);
