@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
-use App\Models\Banner;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,9 +25,7 @@ class AuthController extends Controller
         $created = User::create([
             'uuid' => Str::uuid(),
             'name' => $request->name,
-            'banner_id' => Banner::create([
-                'content' => fake()->hexColor(),
-            ]),
+            'banner' => "#f6b93b",
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
@@ -66,6 +64,17 @@ class AuthController extends Controller
             'message' => "ok ok ok",
             'token' => $token,
         ];
+    }
+
+    /**
+     * Get user profile
+     *
+     * @param Request $request
+     * @return UserResource
+     */
+    public function profile(Request $request): UserResource
+    {
+        return new UserResource($request->user());
     }
 
     /**

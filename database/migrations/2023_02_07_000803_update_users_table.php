@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->after('email_verified_at', function (Blueprint $table) {
                 $table->string('avatar')->nullable();
-                $table->foreignId('banner_id')->constrained()->cascadeOnDelete();
+                $table->text('banner');
                 $table->text('biography')->nullable();
                 $table->string('daily_status', 60)->nullable();
             });

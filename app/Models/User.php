@@ -27,7 +27,7 @@ class User extends Authenticate
     protected $fillable = [
         'uuid',
         'name',
-        'banner_id',
+        'banner',
         'email',
         'password',
     ];

@@ -2,18 +2,27 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 use JsonSerializable;
 
 /**
  * @property int $id
+ * @property string $avatar
  * @property string $name
- * @property string $created_at
+ * @property string $biography
+ * @property string $daily_status
+ * @property string $banner
+ * @property Carbon $created_at
  */
 class UserResource extends JsonResource
 {
+
+    public static $wrap = null;
+
     /**
      * Transform the resource into an array.
      *
@@ -24,8 +33,15 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'avatar' => $this->avatar,
             'name' => $this->name,
-            'created_at' => $this->created_at,
+            'biography' => $this->biography,
+            'daily_status' => $this->daily_status,
+            'banner' => [
+                'type' => ! URL::isValidUrl($this->banner) ? "URL" : "COLOR",
+                'content' => $this->banner,
+            ],
+            'created_at' => $this->created_at->toString(),
         ];
     }
 }

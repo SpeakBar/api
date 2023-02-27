@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\URL;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserRoutesTest extends TestCase
@@ -104,5 +107,35 @@ class UserRoutesTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+    }
+
+    /**
+     * Test get user profile
+     *
+     * @return void
+     */
+    public function test_user_profile()
+    {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs(
+            $user
+        );
+
+        $response = $this->get('/api/profile');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'id' => $user->id,
+            'avatar' => $user->avatar,
+            'name' => $user->name,
+            'biography' => $user->biography,
+            'daily_status' => $user->daily_status,
+            'banner' => [
+                'type' => ! URL::isValidUrl($user->banner) ? "URL" : "COLOR",
+                'content' => $user->banner,
+            ],
+            'created_at' => $user->created_at->toString(),
+        ], true);
     }
 }
