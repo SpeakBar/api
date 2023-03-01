@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('private_messages', function (Blueprint $table) {
+        Schema::create('user_messages', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
-            $table->integer('user_id');
-            $table->integer('channel_id');
+            $table->text('channel');
+            $table->string('content', 255)->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('reply')->nullable()->constrained('user_messages');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('private_messages');
+        Schema::dropIfExists('user_messages');
     }
 };

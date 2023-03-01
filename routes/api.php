@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JoinGroupController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivateMessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,8 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::get('/follow', [FollowerController::class, 'show']);
         Route::post('/follow', [FollowerController::class, 'follow']);
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
+
+        Route::post("/messages", [MessageController::class, 'store']);
     });
 
    Route::prefix("/groups")->group(function () {
