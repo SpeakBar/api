@@ -26,7 +26,6 @@ class StoreMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'content' => 'max:255'
         ];
     }
 

@@ -24,11 +24,15 @@ class UserMessagesTest extends TestCase
     {
         parent::setUp();
 
-        $this->receiver = User::factory()->create();
+        $this->receiver = User::factory()->has(
+            Message::factory()
+        )->create();
 
         $this->uri = "/api/users/" . $this->receiver->id . "/messages";
         $this->sender = Sanctum::actingAs(
-            User::factory()->create()
+            User::factory()->has(
+                Message::factory()
+            )->create()
         );
     }
 
@@ -65,5 +69,25 @@ class UserMessagesTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+    }
+
+    /**
+     * Test crypt message
+     *
+     * @return void
+     */
+    public function test_crypt_message(): void
+    {
+        $message = Message::create([
+            'channel' => min($this->sender->id, $this->receiver->id) . '-' . max($this->sender->id, $this->receiver->id),
+            'user_id' => $this->sender->id,
+            'content' => "John Doe.",
+            'encrypted' => true,
+            'key' => "test",
+        ]);
+
+        $response = $this->post($this->uri . "/" . $message->id . "/decrypt", [
+            'key' => "test",
+        ]);
     }
 }

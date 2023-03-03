@@ -50,6 +50,8 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
 
         Route::post("/messages", [MessageController::class, 'store']);
+        Route::get('/messages/{message}', [MessageController::class, 'show']);
+        Route::post('/messages/{message}/decrypt', [MessageController::class, 'decrypt']);
     });
 
    Route::prefix("/groups")->group(function () {

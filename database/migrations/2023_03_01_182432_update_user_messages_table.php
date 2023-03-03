@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_messages', function (Blueprint $table) {
-            $table->id();
-            $table->text('channel');
-            $table->text('content')->nullable();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('reply')->nullable()->constrained('user_messages');
-            $table->timestamps();
+        Schema::table('user_messages', function (Blueprint $table) {
+            $table->after('reply', function (Blueprint $table) {
+                $table->boolean('encrypted')->default(false);
+                $table->text('encrypt_key')->nullable();
+            });
         });
     }
 

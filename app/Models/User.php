@@ -51,13 +51,9 @@ class User extends Authenticate
         'email_verified_at' => 'datetime',
     ];
 
-    public function banner() {
-        return $this->hasOne(Banner::class);
-    }
-
-    public function dms(): HasMany
+    public function messages(): HasMany
     {
-        return $this->hasMany(PrivateMessage::class);
+        return $this->hasMany(Message::class);
     }
 
     public function followers(): BelongsToMany
