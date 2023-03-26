@@ -37,11 +37,6 @@ Route::prefix('/auth/account')->group(function () {
 });
 
 Route::middleware(['api', 'auth:sanctum'])->group(function () {
-//   Route::prefix("/users/{user}/dm")->group(function () {
-//       Route::post('/', [PrivateMessageController::class, 'store']);
-//       Route::get('/', [PrivateMessageController::class, 'index']);
-//   });
-
     Route::get("/profile", [AuthController::class, 'profile']);
 
     Route::prefix("/users/{user}")->group(function () {
@@ -50,8 +45,6 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
 
         Route::post("/messages", [MessageController::class, 'store']);
-        Route::get('/messages/{message}', [MessageController::class, 'show']);
-        Route::post('/messages/{message}/decrypt', [MessageController::class, 'decrypt']);
     });
 
    Route::prefix("/groups")->group(function () {
