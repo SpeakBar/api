@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int $id
  * @method static create(array $array)
  * @method static find(int $id)
+ * @mixin IdeHelperUser
  */
 class User extends Authenticate
 {

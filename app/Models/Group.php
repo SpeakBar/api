@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $created_at
  * @property int $owner_id
  * @method static find(int $id)
+ * @mixin IdeHelperGroup
  */
 class Group extends Model
 {

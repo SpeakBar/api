@@ -45,6 +45,7 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
 
         Route::post("/messages", [MessageController::class, 'store']);
+        Route::put("/messages/{message}", [MessageController::class, 'update']);
     });
 
    Route::prefix("/groups")->group(function () {

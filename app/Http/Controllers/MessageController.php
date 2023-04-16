@@ -6,6 +6,8 @@ use App\Http\Requests\StoreMessageRequest;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -34,6 +36,29 @@ class MessageController extends Controller
         ]);
 
         return response()->json($create, 201);
+    }
+
+    /**
+     * Update message
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse|Message
+     */
+    public function update(Request $request, User $user, Message $message): JsonResponse|Message
+    {
+        $valid = Validator::make($request->all(), [
+            'content' => "max:512"
+        ]);
+
+        $update = $message->update($valid->valid());
+
+        if ($update) {
+            return $message;
+        }
+        return response()->json([
+            'message' => "Unauthorized."
+        ], 401);
     }
 
 }

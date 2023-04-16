@@ -18,7 +18,7 @@ class UserMessagesTest extends TestCase
 
     private Authenticatable|HasApiTokens $sender;
 
-    private Collection|Model $receiver;
+    private User $receiver;
 
     protected function setUp(): void
     {
@@ -51,39 +51,41 @@ class UserMessagesTest extends TestCase
      *
      * @return void
      */
-//    public function test_reply_sender_message(): void
-//    {
-//        $message = Message::create([
-//            'channel' => min($this->sender->id, $this->receiver->id) . '-' . max($this->sender->id, $this->receiver->id),
-//            'content' => fake()->sentence,
-//            'user_id' => $this->sender->id
-//        ]);
-//
-//        $response = $this->post($this->uri, [
-//            'content' => fake()->sentence(),
-//            'reply' => $message->id,
-//        ]);
-//
-//        $response->assertStatus(201);
-//    }
+    public function test_reply_sender_message(): void
+    {
+        $message = Message::create([
+            'sender_id' => $this->sender->id,
+            'receiver_id' => $this->receiver->id,
+            'content' => fake()->sentence,
+        ]);
+
+        $response = $this->post($this->uri, [
+            'content' => fake()->sentence(),
+            'reply' => $message->id,
+        ]);
+
+        $response->assertStatus(201);
+    }
 
     /**
-     * Test crypt message
+     * Test update message
      *
      * @return void
      */
-//    public function test_crypt_message(): void
-//    {
-//        $message = Message::create([
-//            'channel' => min($this->sender->id, $this->receiver->id) . '-' . max($this->sender->id, $this->receiver->id),
-//            'user_id' => $this->sender->id,
-//            'content' => "John Doe.",
-//            'encrypted' => true,
-//            'key' => "test",
-//        ]);
-//
-//        $response = $this->post($this->uri . "/" . $message->id . "/decrypt", [
-//            'key' => "test",
-//        ]);
-//    }
+    public function test_update_message(): void
+    {
+        $message = Message::create([
+            'content' => 'Je suis une chips',
+            'sender_id' => $this->sender->id,
+            'receiver_id' => $this->receiver->id,
+        ]);
+
+        $response = $this->put($this->uri . '/' . $message->id, [
+            'content' => "Doe"
+        ]);
+
+        $this->assertEquals("Doe", $response->json('content'));
+
+        $response->assertJson(['content' => "Doe"]);
+    }
 }
