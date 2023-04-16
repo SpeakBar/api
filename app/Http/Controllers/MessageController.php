@@ -42,7 +42,8 @@ class MessageController extends Controller
      * Update message
      *
      * @param Request $request
-     * @param int $id
+     * @param User $user
+     * @param Message $message
      * @return JsonResponse|Message
      */
     public function update(Request $request, User $user, Message $message): JsonResponse|Message
