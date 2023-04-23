@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreMessageRequest extends FormRequest
 {
@@ -23,9 +24,10 @@ class StoreMessageRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
+            'key' => Rule::requiredIf(fn () => $this->get('encrypted') !== null),
         ];
     }
 

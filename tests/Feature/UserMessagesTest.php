@@ -101,9 +101,32 @@ class UserMessagesTest extends TestCase
     }
 
     /**
-     * Test encrypt/decrypt message
+     * Test not valid request encrypt/decrypt message
      */
-    public function test_encrypt_decrypt_message() {
+    public function test_not_valid_request_encrypt_decrypt_message() {
+        $response = $this->post($this->uri, [
+            'content' => "John Doe.",
+            'encrypted' => true,
+            'key' => "42",
+        ]);
+        $response->assertStatus(201);
+        $response->assertJson(['encrypted' => true]);
+        $id = $response->json('id');
+
+        $response = $this->post($this->uri, [
+            'content' => "John Doe.",
+            'encrypted' => true,
+        ]);
+        $response->assertStatus(401);
+
+        $response = $this->get($this->uri . "/" . $id . "/decrypt");
+        $response->assertStatus(401);
+    }
+
+    /**
+     * Test valid request encrypt/decrypt message
+     */
+    public function test_valid_request_encrypt_decrypt_message() {
         $response = $this->post($this->uri, [
             'content' => "John Doe.",
             'encrypted' => true,

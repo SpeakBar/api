@@ -21,14 +21,13 @@ class MessageController extends Controller
      */
     public function store(StoreMessageRequest $request, User $user): JsonResponse
     {
+        $content = $request->get('content');
 
         if ($user->is($request->user())) {
             return response()->json([
                 'message' => "Unauthorized."
             ], 401);
         }
-
-        $content = $request->get('content');
         if ($request->get('encrypted')) {
             $content = openssl_encrypt($content, "aes-128-gcm", $request->get("key"), 0, $request->get("key"), $tag);
             $encrypt_key = $tag;
@@ -100,12 +99,23 @@ class MessageController extends Controller
      */
     public function decrypt(Request $request, User $user, Message $message): JsonResponse
     {
+        if (!$message->encrypted)
+            return response()->json(['message' => "Unauthorized."], 401);
+
+        $validator = Validator::make($request->all(), [
+            'key' => "required|string",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => "Unauthorized."], 401);
+        }
+
         $content = openssl_decrypt(
             $message->content,
             "aes-128-gcm",
-            $request->get("key"),
+            $validator->safe()['key'],
             0,
-            $request->get("key"),
+            $validator->safe()['key'],
             $message->encrypt_key
         );
 
