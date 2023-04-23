@@ -62,4 +62,22 @@ class MessageController extends Controller
         ], 401);
     }
 
+    /**
+     * Delete a message
+     *
+     * @param Request $request
+     * @param User $user
+     * @param Message $message
+     */
+    public function delete(Request $request, User $user, Message $message)
+    {
+        $author = $message->author()->first();
+
+        if ($request->user()->id == $author->id)
+        {
+            return response()->json(['message' => "Success."]);
+        }
+        return response()->json(['message' => "Unauthorized."], 401);
+    }
+
 }

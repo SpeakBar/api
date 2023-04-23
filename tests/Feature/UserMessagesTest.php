@@ -86,4 +86,17 @@ class UserMessagesTest extends TestCase
 
         $response->assertJson(['content' => "Doe"]);
     }
+
+    /**
+     * Test delete message
+     */
+    public function test_delete_message() {
+        $message = $this->post($this->uri, [
+            'content' => "John Doe.",
+        ]);
+
+        $id = $message->json('id');
+        $response = $this->delete($this->uri . "/" . $id);
+        $response->assertStatus(200);
+    }
 }
