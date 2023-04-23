@@ -68,8 +68,9 @@ class MessageController extends Controller
      * @param Request $request
      * @param User $user
      * @param Message $message
+     * @return JsonResponse
      */
-    public function delete(Request $request, User $user, Message $message)
+    public function delete(Request $request, User $user, Message $message): JsonResponse
     {
         $author = $message->author()->first();
 
