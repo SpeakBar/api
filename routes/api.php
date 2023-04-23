@@ -47,6 +47,7 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::post("/messages", [MessageController::class, 'store']);
         Route::put("/messages/{message}", [MessageController::class, 'update']);
         Route::delete("/messages/{message}", [MessageController::class, 'delete']);
+        Route::get("/messages/{message}/decrypt", [MessageController::class, 'decrypt']);
     });
 
    Route::prefix("/groups")->group(function () {

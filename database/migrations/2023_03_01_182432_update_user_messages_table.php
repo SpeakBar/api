@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('user_messages', function (Blueprint $table) {
             $table->after('reply', function (Blueprint $table) {
                 $table->boolean('encrypted')->default(false);
-                $table->text('encrypt_key')->nullable();
+                $table->longText('encrypt_key')->nullable();
             });
         });
     }

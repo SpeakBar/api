@@ -28,11 +28,20 @@ class MessageController extends Controller
             ], 401);
         }
 
+        $content = $request->get('content');
+        if ($request->get('encrypted')) {
+            $content = openssl_encrypt($content, "aes-128-gcm", $request->get("key"), 0, $request->get("key"), $tag);
+            $encrypt_key = $tag;
+        } else {
+            $encrypt_key = null;
+        }
         $create = Message::create([
             'sender_id' => $request->user()->id,
             'receiver_id' => $user->id,
-            'content' => $request->get('content'),
-            'reply' => $request->reply,
+            'content' => $content,
+            'reply' => $request->get('reply'),
+            'encrypted' => $request->get('encrypted') ?? false,
+            'encrypt_key' => $encrypt_key,
         ]);
 
         return response()->json($create, 201);
@@ -81,4 +90,33 @@ class MessageController extends Controller
         return response()->json(['message' => "Unauthorized."], 401);
     }
 
+    /**
+     * Decrypt message
+     *
+     * @param Request $request
+     * @param User $user
+     * @param Message $message
+     * @return JsonResponse
+     */
+    public function decrypt(Request $request, User $user, Message $message): JsonResponse
+    {
+        $content = openssl_decrypt(
+            $message->content,
+            "aes-128-gcm",
+            $request->get("key"),
+            0,
+            $request->get("key"),
+            $message->encrypt_key
+        );
+
+        if (!$content) {
+            return response()->json([
+                'message' => "Error."
+            ]);
+        }
+        return response()->json([
+            'message' => "Success.",
+            'content' => $content,
+        ]);
+    }
 }

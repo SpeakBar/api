@@ -99,4 +99,21 @@ class UserMessagesTest extends TestCase
         $response = $this->delete($this->uri . "/" . $id);
         $response->assertStatus(200);
     }
+
+    /**
+     * Test encrypt/decrypt message
+     */
+    public function test_encrypt_decrypt_message() {
+        $response = $this->post($this->uri, [
+            'content' => "John Doe.",
+            'encrypted' => true,
+            'key' => "42",
+        ]);
+        $response->assertStatus(201);
+
+        $response = $this->get($this->uri . "/" . $response->json('id') . "/decrypt?key=42");
+
+        $response->assertJson(['message' => "Success."]);
+        $this->assertEquals("John Doe.", $response->json('content'));
+    }
 }

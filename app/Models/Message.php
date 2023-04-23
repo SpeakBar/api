@@ -21,6 +21,12 @@ class Message extends Model
         "receiver_id",
         "content",
         "reply",
+        "encrypted",
+        "encrypt_key",
+    ];
+
+    protected $hidden = [
+        "encrypt_key",
     ];
 
     public function author(): HasOne
