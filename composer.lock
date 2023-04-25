@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1648611a27a2d54788160976765e21b",
+    "content-hash": "3d8046166443230a5a679e18cd77f034",
     "packages": [
         {
             "name": "brick/math",
@@ -3174,6 +3174,53 @@
                 }
             ],
             "time": "2023-01-12T18:13:24+00:00"
+        },
+        {
+            "name": "steppinghat/emoji-detector",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SteppingHat/php-emoji-detector.git",
+                "reference": "46b37d8664855e6c3b52906dada47e7a73c5a01d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SteppingHat/php-emoji-detector/zipball/46b37d8664855e6c3b52906dada47e7a73c5a01d",
+                "reference": "46b37d8664855e6c3b52906dada47e7a73c5a01d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "symfony/var-dumper": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SteppingHat\\EmojiDetector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Javan Eskander",
+                    "homepage": "https://javaneskander.com"
+                }
+            ],
+            "description": "Detect and validate emoji in an input string",
+            "homepage": "https://github.com/steppinghat/emoji-detector",
+            "support": {
+                "issues": "https://github.com/SteppingHat/php-emoji-detector/issues",
+                "source": "https://github.com/SteppingHat/php-emoji-detector/tree/1.2.1"
+            },
+            "time": "2022-05-16T02:56:06+00:00"
         },
         {
             "name": "symfony/console",
@@ -8927,7 +8974,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "ext-openssl": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"

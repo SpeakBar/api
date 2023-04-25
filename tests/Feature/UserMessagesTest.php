@@ -139,4 +139,37 @@ class UserMessagesTest extends TestCase
         $response->assertJson(['message' => "Success."]);
         $this->assertEquals("John Doe.", $response->json('content'));
     }
+
+    /**
+     * Add reaction on message
+     */
+    public function test_add_reaction_message() {
+        $message = $this->post($this->uri, [
+            'content' => "John Doe."
+        ]);
+
+        $response = $this->post($this->uri . "/" . $message->json('id') . "/react", [
+            'emoji' => "😂",
+        ]);
+        $response->assertStatus(201);
+        $response = $this->post($this->uri . "/" . $message->json('id') . "/react", [
+            'emoji' => "😀😂",
+        ]);
+        $response->assertStatus(401);
+    }
+
+    /**
+     * Get reaction on message
+     */
+    public function test_get_reaction_message() {
+        $message = $this->post($this->uri, [
+            'content' => "John Doe."
+        ]);
+        $this->post($this->uri . "/" . $message->json('id') . "/react", [
+            'emoji' => "😂",
+        ]);
+
+        $response = $this->get($this->uri . "/" . $message->json('id') . "/react");
+        $response->assertJson([['emoji' => "😂"]]);
+    }
 }

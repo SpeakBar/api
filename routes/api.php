@@ -6,6 +6,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JoinGroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivateMessageController;
+use App\Http\Controllers\ReactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,8 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::put("/messages/{message}", [MessageController::class, 'update']);
         Route::delete("/messages/{message}", [MessageController::class, 'delete']);
         Route::get("/messages/{message}/decrypt", [MessageController::class, 'decrypt']);
+        Route::post("/messages/{message}/react", [ReactionController::class, 'store']);
+        Route::get("/messages/{message}/react", [ReactionController::class, 'show']);
     });
 
    Route::prefix("/groups")->group(function () {
