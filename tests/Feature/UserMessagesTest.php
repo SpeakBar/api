@@ -183,12 +183,20 @@ class UserMessagesTest extends TestCase
             'sender_id' => $this->sender->id,
             'receiver_id' => $this->receiver->id,
         ]);
-        $reaction = Reaction::create([
+        $sender_reaction = Reaction::create([
             'emoji' => "😀",
             'message_id' => $message->id,
+            'user_id' => $this->sender->id,
+        ]);
+        $receiver_reaction = Reaction::create([
+            'emoji' => "😀",
+            'message_id' => $message->id,
+            'user_id' => $this->receiver->id,
         ]);
 
-        $response = $this->delete($this->uri . "/" . $message->id . "/react/" . $reaction->id);
+        $response = $this->delete($this->uri . "/" . $message->id . "/react/" . $sender_reaction->id);
         $response->assertStatus(200);
+        $response = $this->delete($this->uri . "/" . $message->id . "/react/" . $receiver_reaction->id);
+        $response->assertStatus(401);
     }
 }

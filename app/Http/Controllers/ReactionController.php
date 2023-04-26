@@ -24,6 +24,7 @@ class ReactionController extends Controller
         }
         $message->reaction()->create([
             'emoji' => $emoji,
+            'user_id' => $request->user()->id,
         ]);
         return response()->json([
             'message' => "Created."
@@ -35,11 +36,11 @@ class ReactionController extends Controller
         return $message->reaction()->get()->jsonSerialize();
     }
 
-    public function delete(User $user, Message $message, Reaction $reaction): JsonResponse
+    public function delete(Request $request, User $user, Message $message, Reaction $reaction): JsonResponse
     {
         $deleted = $reaction->delete();
 
-        if ($deleted) {
+        if ($deleted && $reaction->user_id == $request->user()->id) {
             return response()->json(['message' => "Success."]);
         }
         return response()->json(['message' => "Unauthorized."], 401);

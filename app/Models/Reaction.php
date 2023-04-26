@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Reaction whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reaction whereMessageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Reaction whereUpdatedAt($value)
+ * @property int $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Reaction whereUserId($value)
  * @mixin \Eloquent
  */
 class Reaction extends Model
@@ -29,6 +31,7 @@ class Reaction extends Model
 
     protected $fillable = [
         'emoji',
-        'message_id'
+        'message_id',
+        'user_id',
     ];
 }
