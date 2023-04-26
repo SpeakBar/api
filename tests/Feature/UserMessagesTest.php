@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Message;
+use App\Models\Reaction;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -171,5 +172,23 @@ class UserMessagesTest extends TestCase
 
         $response = $this->get($this->uri . "/" . $message->json('id') . "/react");
         $response->assertJson([['emoji' => "😂"]]);
+    }
+
+    /**
+     * Delete reaction
+     */
+    public function test_delete_reaction() {
+        $message = Message::create([
+            'content' => fake()->sentence,
+            'sender_id' => $this->sender->id,
+            'receiver_id' => $this->receiver->id,
+        ]);
+        $reaction = Reaction::create([
+            'emoji' => "😀",
+            'message_id' => $message->id,
+        ]);
+
+        $response = $this->delete($this->uri . "/" . $message->id . "/react/" . $reaction->id);
+        $response->assertStatus(200);
     }
 }

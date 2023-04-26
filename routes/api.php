@@ -45,12 +45,16 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
         Route::post('/follow', [FollowerController::class, 'follow']);
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
 
-        Route::post("/messages", [MessageController::class, 'store']);
-        Route::put("/messages/{message}", [MessageController::class, 'update']);
-        Route::delete("/messages/{message}", [MessageController::class, 'delete']);
-        Route::get("/messages/{message}/decrypt", [MessageController::class, 'decrypt']);
-        Route::post("/messages/{message}/react", [ReactionController::class, 'store']);
-        Route::get("/messages/{message}/react", [ReactionController::class, 'show']);
+        Route::prefix("/messages")->group(function () {
+            Route::post("/", [MessageController::class, 'store']);
+            Route::put("/{message}", [MessageController::class, 'update']);
+            Route::delete("/{message}", [MessageController::class, 'delete']);
+            Route::get("/{message}/decrypt", [MessageController::class, 'decrypt']);
+
+            Route::post("/{message}/react", [ReactionController::class, 'store']);
+            Route::get("/{message}/react", [ReactionController::class, 'show']);
+            Route::delete("/{message}/react/{reaction}", [ReactionController::class, 'delete']);
+        });
     });
 
    Route::prefix("/groups")->group(function () {

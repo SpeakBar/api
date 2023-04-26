@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Reaction;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,6 +33,16 @@ class ReactionController extends Controller
     public function show(User $user, Message $message): array
     {
         return $message->reaction()->get()->jsonSerialize();
+    }
+
+    public function delete(User $user, Message $message, Reaction $reaction): JsonResponse
+    {
+        $deleted = $reaction->delete();
+
+        if ($deleted) {
+            return response()->json(['message' => "Success."]);
+        }
+        return response()->json(['message' => "Unauthorized."], 401);
     }
 
 }
