@@ -38,6 +38,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereSenderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reaction> $reaction
+ * @property int $channel_id
+ * @property-read \App\Models\Channel|null $channel
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reaction> $reaction
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereChannelId($value)
  * @mixin \Eloquent
  */
 class Message extends Model
@@ -67,5 +71,10 @@ class Message extends Model
     public function reaction(): HasMany
     {
         return $this->hasMany(Reaction::class);
+    }
+
+    public function channel(): HasOne
+    {
+        return $this->hasOne(Channel::class);
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMessageRequest;
+use App\Models\Channel;
 use App\Models\Message;
 use App\Models\User;
+use DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +24,18 @@ class MessageController extends Controller
     public function store(StoreMessageRequest $request, User $user): JsonResponse
     {
         $content = $request->get('content');
+
+        $exist = DB::table('channel_user')->where([
+            'user_id' => $user->id,
+        ])->where([
+            'user_id' => $request->user()->id,
+        ])->exists();
+
+        if (!$exist) {
+            $channel = Channel::create();
+            $channel->users()->attach($request->user());
+            $channel->users()->attach($user);
+        }
 
         if ($user->is($request->user())) {
             return response()->json([
