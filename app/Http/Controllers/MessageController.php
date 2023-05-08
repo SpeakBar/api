@@ -25,18 +25,6 @@ class MessageController extends Controller
     {
         $content = $request->get('content');
 
-        $exist = DB::table('channel_user')->where([
-            'user_id' => $user->id,
-        ])->where([
-            'user_id' => $request->user()->id,
-        ])->exists();
-
-        if (!$exist) {
-            $channel = Channel::create();
-            $channel->users()->attach($request->user());
-            $channel->users()->attach($user);
-        }
-
         if ($user->is($request->user())) {
             return response()->json([
                 'message' => "Unauthorized."
