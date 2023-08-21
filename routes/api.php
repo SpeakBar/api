@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JoinGroupController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivateMessageController;
+use App\Http\Controllers\ReactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,17 +38,23 @@ Route::prefix('/auth/account')->group(function () {
 });
 
 Route::middleware(['api', 'auth:sanctum'])->group(function () {
-//   Route::prefix("/users/{user}/dm")->group(function () {
-//       Route::post('/', [PrivateMessageController::class, 'store']);
-//       Route::get('/', [PrivateMessageController::class, 'index']);
-//   });
-
     Route::get("/profile", [AuthController::class, 'profile']);
 
     Route::prefix("/users/{user}")->group(function () {
         Route::get('/follow', [FollowerController::class, 'show']);
         Route::post('/follow', [FollowerController::class, 'follow']);
         Route::post('/unfollow', [FollowerController::class, 'unfollow']);
+
+        Route::prefix("/messages")->group(function () {
+            Route::post("/", [MessageController::class, 'store']);
+            Route::put("/{message}", [MessageController::class, 'update']);
+            Route::delete("/{message}", [MessageController::class, 'delete']);
+            Route::get("/{message}/decrypt", [MessageController::class, 'decrypt']);
+
+            Route::post("/{message}/react", [ReactionController::class, 'store']);
+            Route::get("/{message}/react", [ReactionController::class, 'show']);
+            Route::delete("/{message}/react/{reaction}", [ReactionController::class, 'delete']);
+        });
     });
 
    Route::prefix("/groups")->group(function () {
