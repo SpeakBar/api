@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Message;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -50,6 +51,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('user', $notFound);
         Route::bind('group', $notFound);
+        Route::bind('message', $notFound);
     }
 
     /**

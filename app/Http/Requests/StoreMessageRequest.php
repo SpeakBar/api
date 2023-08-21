@@ -5,15 +5,16 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
-class StorePrivateMessageRequest extends FormRequest
+class StoreMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -26,24 +27,15 @@ class StorePrivateMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|max:255|min:1',
+            'key' => Rule::requiredIf(fn () => $this->get('encrypted') !== null),
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             response()->json([
                 'message' => "Invalid body",
-            ], 401)
-        );
-    }
-
-    public function failedAuthorization()
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'message' => "Unauthorized."
             ], 401)
         );
     }
