@@ -5,6 +5,7 @@ use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\JoinGroupController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\PrivateMessageController;
 use App\Http\Controllers\ReactionController;
 use Illuminate\Http\Request;
@@ -54,6 +55,11 @@ Route::middleware(['api', 'auth:sanctum'])->group(function () {
             Route::post("/{message}/react", [ReactionController::class, 'store']);
             Route::get("/{message}/react", [ReactionController::class, 'show']);
             Route::delete("/{message}/react/{reaction}", [ReactionController::class, 'delete']);
+        });
+
+        Route::prefix("/posts")->group(function () {
+            Route::post("/", [PostController::class, 'store']);
+            Route::get("", [PostController::class, 'show']);
         });
     });
 

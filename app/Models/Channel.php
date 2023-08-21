@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Channel query()
  * @method static \Illuminate\Database\Eloquent\Builder|Channel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Channel whereId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @mixin \Eloquent
  */
 class Channel extends Model
